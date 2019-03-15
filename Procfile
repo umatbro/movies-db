@@ -1,0 +1,1 @@
+web: gunicorn movies_db.wsgi
