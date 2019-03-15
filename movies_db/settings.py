@@ -25,7 +25,7 @@ SECRET_KEY = '@6_(q-1-zuz-f#d&-gg076ost_p*w$#y5-bpk*b06coq-whn9m'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['movies-db-ng.herokuapp.com']
+ALLOWED_HOSTS = ['movies-db-ng.herokuapp.com', '127.0.0.1']
 
 
 # Application definition
@@ -118,4 +118,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = 'staticfiles'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)
