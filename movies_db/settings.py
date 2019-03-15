@@ -25,7 +25,7 @@ SECRET_KEY = '@6_(q-1-zuz-f#d&-gg076ost_p*w$#y5-bpk*b06coq-whn9m'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['movies-db-ng.herokuapp.com']
 
 
 # Application definition
