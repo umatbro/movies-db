@@ -3,8 +3,8 @@ from django.db import models
 
 class Movie(models.Model):
     title = models.CharField(max_length=120, blank=False)
-    cover = models.URLField()
-    release_date = models.DateField(blank=True)
-    duration = models.IntegerField()  # movie duration in minutes
-    director = models.CharField(max_length=100, blank=True)
-    website = models.URLField()
+    cover = models.URLField(null=True)
+    release_date = models.DateField(null=True)
+    duration = models.IntegerField(null=True)  # movie duration in minutes
+    director = models.CharField(max_length=100, null=True)
+    website = models.URLField(null=True)
