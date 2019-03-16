@@ -131,3 +131,5 @@ STATICFILES_DIRS = (
 )
 
 django_heroku.settings(locals())
+
+OMDB_API_KEY = 'd2be3048'

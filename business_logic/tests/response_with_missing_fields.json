@@ -1,40 +1,8 @@
 {
-  "Title": "The Avengers",
+  "Title": "Some hipster movie",
   "Year": "2012",
-  "Rated": "PG-13",
-  "Released": "04 May 2012",
-  "Runtime": "143 min",
-  "Genre": "Action, Adventure, Sci-Fi",
-  "Director": "Joss Whedon",
-  "Writer": "Joss Whedon (screenplay), Zak Penn (story), Joss Whedon (story)",
-  "Actors": "Robert Downey Jr., Chris Evans, Mark Ruffalo, Chris Hemsworth",
-  "Plot": "Earth's mightiest heroes must come together and learn to fight as a team if they are going to stop the mischievous Loki and his alien army from enslaving humanity.",
-  "Language": "English, Russian, Hindi",
-  "Country": "USA",
-  "Awards": "Nominated for 1 Oscar. Another 38 wins & 79 nominations.",
-  "Poster": "https://example_host.com/pic.jpg/",
-  "Ratings": [
-    {
-      "Source": "Internet Movie Database",
-      "Value": "8.1/10"
-    },
-    {
-      "Source": "Rotten Tomatoes",
-      "Value": "92%"
-    },
-    {
-      "Source": "Metacritic",
-      "Value": "69/100"
-    }
-  ],
-  "Metascore": "69",
-  "imdbRating": "8.1",
-  "imdbVotes": "1,150,578",
-  "imdbID": "tt0848228",
-  "Type": "movie",
-  "DVD": "25 Sep 2012",
-  "BoxOffice": "$623,279,547",
-  "Production": "Walt Disney Pictures",
-  "Website": "http://marvel.com/avengers_movie",
-  "Response": "True"
+  "Rated": "N/A",
+  "Released": "N/A",
+  "Runtime": "N/A",
+  "Genre": "Action, Adventure, Sci-Fi"
 }
