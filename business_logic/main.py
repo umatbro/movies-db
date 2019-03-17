@@ -26,6 +26,9 @@ def fetch_movie_info(title: str, save_to_db: bool = True) -> models.Movie:
     :return: movie that was saved to database
     :raises: BusinessLogicException if no movie was saved to database.
     """
+    if not title:
+        raise exceptions.BusinessLogicException('Please provide title movie', code=500)
+
     query = parse.urlencode({'t': title, 'apikey': OMDB_API_KEY})
     request_addr = f'{API_HOST}?{query}'
     logger.info(f'Fetching resources from: {request_addr}')
