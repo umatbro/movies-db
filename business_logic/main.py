@@ -8,6 +8,7 @@ from dateutil.parser import parse as parse_date
 from django.core.exceptions import ValidationError
 
 from movies_api import models
+from comments.models import Comment
 from movies_db.settings import OMDB_API_KEY
 from business_logic import exceptions, utils
 
@@ -65,3 +66,20 @@ def fetch_movie_info(title: str, save_to_db: bool = True) -> models.Movie:
         raise exceptions.BusinessLogicException(e)
 
     return movie
+
+
+def add_comment(movie_id: int, comment_body: str) -> Comment:
+    """
+    Add comment to desired movie.
+
+    :param movie_id:
+    :param comment_body:
+    :return: comment instance that was created
+    :raises BusinessLogicException: when invalid movie id was provided
+    """
+    try:
+        movie = models.Movie.objects.get(id=movie_id)
+    except models.Movie.DoesNotExist:
+        raise exceptions.BusinessLogicException(f'Movie with id {movie_id} does not exist.', code=404)
+
+    return Comment.objects.create(movie=movie, body=comment_body)
