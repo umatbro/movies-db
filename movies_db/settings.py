@@ -53,6 +53,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    # custom middleware
+    'business_logic.exceptions.BusinessLogicExceptionHandlerMiddleware',
 ]
 
 ROOT_URLCONF = 'movies_db.urls'
