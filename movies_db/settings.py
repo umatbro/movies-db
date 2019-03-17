@@ -137,3 +137,9 @@ STATICFILES_DIRS = (
 django_heroku.settings(locals())
 
 OMDB_API_KEY = 'd2be3048'
+
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',
+    ),
+}
