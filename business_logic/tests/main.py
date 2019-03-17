@@ -2,7 +2,6 @@ import os
 import json
 from django.test import TestCase
 from unittest import mock
-from urllib import parse
 import datetime as dt
 
 import business_logic as bl
@@ -29,9 +28,9 @@ class TestMovie(TestCase):
             self.response_with_missing_fields.text = f.read()
 
     @mock.patch('requests.get')
-    def test_valid_request_was_made(self, request_get_mock):
+    def test_valid_request_to_external_api_was_made(self, request_get_mock):
         """
-        Check whether valid request was sent to API.
+        Check whether valid request was sent to the external API.
         """
         request_get_mock.return_value = self.example_response
         bl.fetch_movie_info('avengers')
@@ -58,12 +57,18 @@ class TestMovie(TestCase):
 
     @mock.patch('requests.get')
     def test_error_response_from_server(self, request_get_mock):
+        """
+        Case when there was an error returned by external API.
+        """
         request_get_mock.return_value = self.response_with_error
         with self.assertRaisesMessage(bl.exceptions.BusinessLogicException, 'Movie not found.'):
             bl.fetch_movie_info('there is no movie with this name')
 
     @mock.patch('requests.get')
     def test_response_with_missing_data(self, request_get_mock):
+        """
+        Case when we receive response with some missing fields.
+        """
         request_get_mock.return_value = self.response_with_missing_fields
         movie = bl.fetch_movie_info('hipster movie')
 
@@ -74,3 +79,19 @@ class TestMovie(TestCase):
         self.assertEqual(movie.director, None)
         self.assertEqual(movie.website, None)
 
+
+class TestComments(TestCase):
+    def setUp(self):
+        self.movie = models.Movie.objects.create(title='Test')
+
+    def test_add_comment(self):
+        bl.add_comment(self.movie.id, 'this is a test comment')
+
+        # check if comment exists in database
+        self.assertTrue(self.movie.comment_set.all().exists())
+        self.assertEquals(self.movie.comment_set.first().body, 'this is a test comment')
+
+    def test_do_not_add_comment_if_movie_id_does_not_exist(self):
+        non_existing_id = self.movie.id + 1
+        with self.assertRaisesMessage(bl.exceptions.BusinessLogicException, 'does not exist'):
+            bl.add_comment(non_existing_id, 'this won\'t work anyway')
