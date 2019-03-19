@@ -2,7 +2,7 @@
 
 The app is hosted on http://movies-db-ng.herokuapp.com/
 
-## project setup
+## Project setup
 
 Requirements:
 * Python 3.6 and above
@@ -36,3 +36,48 @@ To start development server run:
 ```
 python manage.py runserver
 ```
+
+## Endpoints
+
+### `/movies/`
+<table>
+  <tr>
+    <th colspan="2">GET</th>
+  </tr>
+  <tr>
+    <td>query param</td>
+    <td>description</td>
+  </tr>
+  <tr>
+    <td><br>title</td>
+    <td>type: String<br>Filter by title. Lookup expression: 'icontains'<br></td>
+  </tr>
+  <tr>
+    <td><br>duration__gt<br></td>
+    <td>type: Integer<br><br>Filter movies with duration greater than the given number (unit: minutes)</td>
+  </tr>
+  <tr>
+    <td><br>duration__lt</td>
+    <td>type: Integer<br>Filter movies with duration less than the given number (unit: minutes)<br></td>
+  </tr>
+  <tr>
+    <td>release_date</td>
+    <td>type: String<br>Filter movies by exact date. Date should be provided in format: "YYYY-MM-DD".<br></td>
+  </tr>
+  <tr>
+    <td>release_year</td>
+    <td>type: Number<br>Filter movies from a given year.<br></td>
+  </tr>
+  <tr>
+    <td>release_year__gt</td>
+    <td>type: Number<br>Filter movies released after the given year.<br></td>
+  </tr>
+  <tr>
+    <td>release_year__lt</td>
+    <td>type: Number<br>Filter movies released before the given year.<br></td>
+  </tr>
+  <tr>
+    <td>director</td>
+    <td>type: String<br>Filter movies with given director.<br></td>
+  </tr>
+</table>
