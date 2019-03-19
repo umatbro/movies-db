@@ -5,7 +5,7 @@ from rest_framework.request import Request
 from django_filters import rest_framework as dj_filters
 
 import business_logic as bl
-from movies_api import serializers, models,filters
+from movies_api import serializers, models, filters
 
 
 class MovieView(ListCreateAPIView):

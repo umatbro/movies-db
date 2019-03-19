@@ -17,8 +17,11 @@ from django.contrib import admin
 from django.urls import path
 
 from movies_api import views as movie_views
+from comments import views as comment_views
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('movies/', movie_views.MovieView.as_view()),
+    path('movies/', movie_views.MovieView.as_view(), name='movies'),
+    path('comments/', comment_views.CommentView.as_view(), name='comments'),
 ]
