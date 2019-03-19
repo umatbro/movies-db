@@ -40,9 +40,10 @@ python manage.py runserver
 ## Endpoints
 
 ### `/movies/`
+
 <table>
   <tr>
-    <th colspan="2">GET</th>
+    <th colspan="2"><span style="font-weight:bold">GET</span> - get list of movies (filtering available)</th>
   </tr>
   <tr>
     <td>query param</td>
@@ -79,5 +80,12 @@ python manage.py runserver
   <tr>
     <td>director</td>
     <td>type: String<br>Filter movies with given director.<br></td>
+  </tr>
+  <tr>
+    <td colspan="2"><span style="font-weight:bold">POST</span> - add new movie to the database</td>
+  </tr>
+  <tr>
+    <td>title</td>
+    <td>Type: String, *required*<br>Title of the movie to be added.<br></td>
   </tr>
 </table>
