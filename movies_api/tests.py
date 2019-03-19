@@ -34,4 +34,3 @@ class TestMoviesApi(TestCase):
 
         # check that nothing has been saved to the database
         self.assertFalse(models.Movie.objects.exists())
-        print(response.content)
