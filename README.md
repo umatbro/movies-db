@@ -81,8 +81,10 @@ python manage.py runserver
     <td>director</td>
     <td>type: String<br>Filter movies with given director.<br></td>
   </tr>
+</table>
+<table>
   <tr>
-    <td colspan="2"><span style="font-weight:bold">POST</span> - add new movie to the database</td>
+    <th colspan="2"><span style="font-weight:bold">POST</span> - add new movie to the database</td>
   </tr>
   <tr>
     <td>title</td>
