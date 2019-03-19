@@ -1,5 +1,7 @@
 # movies-db
 
+The app is hosted on http://movies-db-ng.herokuapp.com/
+
 ## project setup
 
 Requirements:
