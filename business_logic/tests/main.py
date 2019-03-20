@@ -1,5 +1,6 @@
 import os
 import json
+from typing import List
 from django.test import TestCase
 from unittest import mock
 import datetime as dt
@@ -112,27 +113,64 @@ class TestTopMovies(TestCase):
         self.mov2 = models.Movie.objects.create(title='mov2')
         self.mov3 = models.Movie.objects.create(title='mov3')
         self.mov4 = models.Movie.objects.create(title='mov4')
+        self.mov5 = models.Movie.objects.create(title='mov5')
+        self.mov_out_of_range = models.Movie.objects.create(title='mov')
 
-        def create_comments_for_movie(movie: models.Movie, num_of_comments: int):
-            for i in range(num_of_comments):
-                Comment.objects.create(movie=movie, body=f'comment {i}')
+        def create_comments_for_movie(movie: models.Movie, num_of_comments: int, dates: List[dt.date] = None):
+            """
+            Create comments for given movie.
 
+            :param movie:
+            :param num_of_comments:
+            :param dates: a list containing dates to assign to comments. Should be the length of num_of_comments
+            """
+            if dates is None:
+                dates = [dt.date(2010, 1, 1)] * num_of_comments
+            for i, date in zip(range(num_of_comments), dates):
+                Comment.objects.create(movie=movie, body=f'comment {i}', publish_date=date)
+
+        create_comments_for_movie(self.mov_out_of_range, 2, [dt.date(1970, 1, 1), dt.date(1970, 1, 2)])
         create_comments_for_movie(self.mov1, 3)
         create_comments_for_movie(self.mov2, 4)
         create_comments_for_movie(self.mov3, 2)
         create_comments_for_movie(self.mov4, 3)
+        create_comments_for_movie(self.mov5, 5, [dt.date(1970, 1, 1)] + [dt.date(2010, 1, 1)] * 3 + [dt.date(2020, 1, 1)])
 
     def test_fetch_ranking(self):
-        ranking = bl.get_ranking()
+        ranking = bl.get_ranking(dt.date(2000, 1, 1), dt.date(2011, 1, 1))
 
         # compare number of comments
         self.assertListEqual(
-            [4, 3, 3, 2],
+            [4, 3, 3, 3, 2, 0],
             [movie.total_comments for movie in ranking]
         )
 
         # compare rank
         self.assertListEqual(
-            [1, 2, 2, 3],
+            [1, 2, 2, 2, 3, 4],
             [movie.rank for movie in ranking]
         )
+
+        # check if self.mov5 has rank 2 and 3 comments were taken into account
+        mov5 = ranking.get(id=self.mov5.id)
+        self.assertEqual(mov5.total_comments, 3)
+
+    def test_edge_date_values(self):
+        models.Movie.objects.all().delete()
+        mov = models.Movie.objects.create(title='mov')
+        edge_date_from = dt.date(2030, 1, 1)
+        edge_date_until = dt.date(2031, 1, 1)
+        min_timedelta = dt.timedelta(days=1)
+
+        # create 6 comments, only 4 of them should be captured by given range
+        Comment.objects.create(movie=mov, publish_date=edge_date_from - min_timedelta)
+        Comment.objects.create(movie=mov, publish_date=edge_date_from)
+        Comment.objects.create(movie=mov, publish_date=edge_date_from + min_timedelta)
+        Comment.objects.create(movie=mov, publish_date=edge_date_until - min_timedelta)
+        Comment.objects.create(movie=mov, publish_date=edge_date_until)
+        Comment.objects.create(movie=mov, publish_date=edge_date_until + min_timedelta)
+
+        ranking = bl.get_ranking(edge_date_from, edge_date_until)
+        self.assertEqual(ranking.count(), 1)
+        movie_from_ranking = ranking.first()
+        self.assertEqual(movie_from_ranking.total_comments, 4)
