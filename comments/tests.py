@@ -3,6 +3,7 @@ from io import BytesIO
 
 from django.test import TestCase
 from django.urls import reverse
+from django.utils.http import urlencode
 from rest_framework.test import APIClient
 
 
@@ -30,4 +31,15 @@ class TestCommentsApi(TestCase):
         res_body = json.load(BytesIO(response.content))
         self.assertEqual(res_body['message'], 'Provide movie_id in request body.')
 
-    def test_do_not_
+    def test_do_not_return_ranking_when_no_date_range_provided(self):
+        response = self.client.get(reverse('top'))
+        self.assertEqual(response.status_code, 400)
+
+    def test_get_valid_response_when_date_range_provided(self):
+        q = urlencode({'date_from': '2010-10-10', 'date_until': '2011-10-10'})
+        response = self.client.get(reverse('top') + f'?{q}')
+        self.assertEqual(response.status_code, 200)
+
+        res_body = json.load(BytesIO(response.content))
+        self.assertEqual(res_body[0]['total_comments'], 0)
+        self.assertEqual(res_body[0]['rank'], 1)

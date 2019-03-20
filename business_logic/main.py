@@ -114,7 +114,7 @@ def get_ranking(date_from: date, date_until: date) -> Union[List[models.Movie], 
     if errors:
         raise exceptions.BusinessLogicException(
             'Please provide date range (date_from and date_until) to generate the ranking.',
-            code=400,
+            code=s.HTTP_400_BAD_REQUEST,
             errors=errors,
         )
 
