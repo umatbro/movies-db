@@ -22,5 +22,10 @@ class MovieView(ListCreateAPIView):
 
 
 class TopMoviesView(ListAPIView):
-    queryset = bl.get_ranking()
     serializer_class = serializers.MovieRankingSerializer
+
+    def get_queryset(self):
+        date_from = bl.utils.parse_date(self.request.query_params.get('date_from'))
+        date_until = bl.utils.parse_date(self.request.query_params.get('date_until'))
+
+        return bl.get_ranking(date_from, date_until)

@@ -29,3 +29,5 @@ class TestCommentsApi(TestCase):
         self.assertEqual(response.status_code, 400)
         res_body = json.load(BytesIO(response.content))
         self.assertEqual(res_body['message'], 'Provide movie_id in request body.')
+
+    def test_do_not_

@@ -5,9 +5,10 @@ import logging
 from typing import Union, List
 from urllib import parse
 from dateutil.parser import parse as parse_date
+from datetime import date
 
 from django.core.exceptions import ValidationError
-from django.db.models import QuerySet, Count, F, Window
+from django.db.models import QuerySet, Count, F, Window, Q
 from django.db.models.functions.window import DenseRank
 from rest_framework import status as s
 
@@ -95,12 +96,30 @@ def add_comment(movie_id: int, comment_body: str) -> Comment:
     return comment
 
 
-def get_ranking() -> Union[List[models.Movie], QuerySet]:
+def get_ranking(date_from: date, date_until: date) -> Union[List[models.Movie], QuerySet]:
     """
     Create Movies ranking based on amount of related Comments.
 
+    :param date_from: date from (query: gte)
+    :param date_until: date until (query: lte)
+    :raises BusinessLogicException: if either date_from or date_until is not present
     :return: QuerySet of Movies with annotated: `total_comments` and `rank`
     """
+    errors = []
+    if not date_from:
+        errors.append('date_from not provided')
+    if not date_until:
+        errors.append('date_until not provided')
+
+    if errors:
+        raise exceptions.BusinessLogicException(
+            'Please provide date range (date_from and date_until) to generate the ranking.',
+            code=400,
+            errors=errors,
+        )
+
+    query = Q(comment__publish_date__gte=date_from, comment__publish_date__lte=date_until)
+
     return models.Movie.objects\
-        .annotate(total_comments=Count('comment'))\
+        .annotate(total_comments=Count('comment', filter=query))\
         .annotate(rank=Window(expression=DenseRank(), order_by=F('total_comments').desc()))
