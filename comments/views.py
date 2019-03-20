@@ -17,5 +17,6 @@ class CommentView(ListCreateAPIView):
     def post(self, request: Request, *args: Any, **kwargs: Any) -> Response:
         movie_id = request.data.get('movie_id', None) or request.data.get('movie', None)
         comment_body = request.data.get('body', None)
-        comment = bl.add_comment(movie_id, comment_body)
+        publish_date = request.data.get('publish_date', None)
+        comment = bl.add_comment(movie_id, comment_body, publish_date)
         return Response(serializers.CommentSerializer(comment).data)

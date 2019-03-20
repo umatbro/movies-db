@@ -73,10 +73,11 @@ def fetch_movie_info(title: str, save_to_db: bool = True) -> models.Movie:
     return movie
 
 
-def add_comment(movie_id: int, comment_body: str) -> Comment:
+def add_comment(movie_id: int, comment_body: str, publish_date: date = None) -> Comment:
     """
     Add comment to desired movie.
 
+    :param publish_date:
     :param movie_id:
     :param comment_body:
     :return: comment instance that was created
@@ -91,7 +92,10 @@ def add_comment(movie_id: int, comment_body: str) -> Comment:
     except models.Movie.DoesNotExist:
         raise exceptions.BusinessLogicException(f'Movie with id {movie_id} does not exist.', code=s.HTTP_404_NOT_FOUND)
 
-    comment = Comment.objects.create(movie=movie, body=comment_body)
+    kwargs = {}
+    if publish_date:
+        kwargs['publish_date'] = publish_date
+    comment = Comment.objects.create(movie=movie, body=comment_body, **kwargs)
     logger.info(f'Comment id:{comment.id} for movie ({movie.id}) has been saved.')
     return comment
 
