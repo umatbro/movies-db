@@ -25,7 +25,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '@6_(q-1-zuz-f#d&-gg076ost_p*w$#y5-bpk*b06coq-whn9m'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False if os.environ.get('PROD_ENV') == '1' else True
 
 ALLOWED_HOSTS = ['movies-db-ng.herokuapp.com', '127.0.0.1']
 
