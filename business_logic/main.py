@@ -2,10 +2,13 @@ import re
 import json
 import requests
 import logging
+from typing import Union, List
 from urllib import parse
 from dateutil.parser import parse as parse_date
 
 from django.core.exceptions import ValidationError
+from django.db.models import QuerySet, Count, F, Window
+from django.db.models.functions.window import DenseRank
 from rest_framework import status as s
 
 from movies_api import models
@@ -90,3 +93,14 @@ def add_comment(movie_id: int, comment_body: str) -> Comment:
     comment = Comment.objects.create(movie=movie, body=comment_body)
     logger.info(f'Comment id:{comment.id} for movie ({movie.id}) has been saved.')
     return comment
+
+
+def get_ranking() -> Union[List[models.Movie], QuerySet]:
+    """
+    Create Movies ranking based on amount of related Comments.
+
+    :return: QuerySet of Movies with annotated: `total_comments` and `rank`
+    """
+    return models.Movie.objects\
+        .annotate(total_comments=Count('comment'))\
+        .annotate(rank=Window(expression=DenseRank(), order_by=F('total_comments').desc()))

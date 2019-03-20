@@ -24,4 +24,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('movies/', movie_views.MovieView.as_view(), name='movies'),
     path('comments/', comment_views.CommentView.as_view(), name='comments'),
+    path('top/', movie_views.TopMoviesView.as_view(), name='top'),
 ]

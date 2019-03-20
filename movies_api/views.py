@@ -1,5 +1,5 @@
 from typing import Any
-from rest_framework.generics import ListCreateAPIView
+from rest_framework.generics import ListCreateAPIView, ListAPIView
 from rest_framework.response import Response
 from rest_framework.request import Request
 from django_filters import rest_framework as dj_filters
@@ -19,3 +19,8 @@ class MovieView(ListCreateAPIView):
         movie = bl.fetch_movie_info(title)
         movie_s = serializers.MovieSerializer(movie)
         return Response(movie_s.data)
+
+
+class TopMoviesView(ListAPIView):
+    queryset = bl.get_ranking()
+    serializer_class = serializers.MovieRankingSerializer

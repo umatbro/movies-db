@@ -7,6 +7,7 @@ import datetime as dt
 import business_logic as bl
 from movies_api import models
 from movies_db.settings import OMDB_API_KEY
+from comments.models import Comment
 
 
 class TestMovie(TestCase):
@@ -103,3 +104,35 @@ class TestComments(TestCase):
     def test_movie_id_is_none(self):
         with self.assertRaises(bl.exceptions.BusinessLogicException):
             bl.add_comment(None, 'test')
+
+
+class TestTopMovies(TestCase):
+    def setUp(self):
+        self.mov1 = models.Movie.objects.create(title='mov1')
+        self.mov2 = models.Movie.objects.create(title='mov2')
+        self.mov3 = models.Movie.objects.create(title='mov3')
+        self.mov4 = models.Movie.objects.create(title='mov4')
+
+        def create_comments_for_movie(movie: models.Movie, num_of_comments: int):
+            for i in range(num_of_comments):
+                Comment.objects.create(movie=movie, body=f'comment {i}')
+
+        create_comments_for_movie(self.mov1, 3)
+        create_comments_for_movie(self.mov2, 4)
+        create_comments_for_movie(self.mov3, 2)
+        create_comments_for_movie(self.mov4, 3)
+
+    def test_fetch_ranking(self):
+        ranking = bl.get_ranking()
+
+        # compare number of comments
+        self.assertListEqual(
+            [4, 3, 3, 2],
+            [movie.total_comments for movie in ranking]
+        )
+
+        # compare rank
+        self.assertListEqual(
+            [1, 2, 2, 3],
+            [movie.rank for movie in ranking]
+        )
