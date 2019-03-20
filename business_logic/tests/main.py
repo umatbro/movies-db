@@ -95,3 +95,11 @@ class TestComments(TestCase):
         non_existing_id = self.movie.id + 1
         with self.assertRaisesMessage(bl.exceptions.BusinessLogicException, 'does not exist'):
             bl.add_comment(non_existing_id, 'this won\'t work anyway')
+
+    def test_do_not_add_comment_with_empty_body(self):
+        with self.assertRaisesMessage(bl.exceptions.BusinessLogicException, 'cannot be empty'):
+            bl.add_comment(self.movie.id, '')
+
+    def test_movie_id_is_none(self):
+        with self.assertRaises(bl.exceptions.BusinessLogicException):
+            bl.add_comment(None, 'test')
