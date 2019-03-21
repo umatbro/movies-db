@@ -31,6 +31,10 @@ class TestCommentsApi(TestCase):
         res_body = json.load(BytesIO(response.content))
         self.assertEqual(res_body['message'], 'Provide movie_id in request body.')
 
+    def test_fail_to_add_comment_when_comment_body_is_empty(self):
+        response = self.client.post(reverse('comments'), {'movie_id': self.movie.id, 'body': ''})
+        self.assertEqual(response.status_code, 400)
+
     def test_do_not_return_ranking_when_no_date_range_provided(self):
         response = self.client.get(reverse('top'))
         self.assertEqual(response.status_code, 400)

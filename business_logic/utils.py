@@ -19,6 +19,6 @@ def read_field(dictionary: dict, key: str) -> Union[str, None]:
 
 def parse_date(date_str: str) -> Union[date, None]:
     try:
-        return parse(date_str)
+        return parse(date_str).date()
     except TypeError:
         return None
