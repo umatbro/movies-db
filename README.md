@@ -158,3 +158,25 @@ python manage.py runserver
     <td>type: String, *required*<br>Comments with publish_date less than or equal this date will be taken into account for ranking calculations.</td>
   </tr>
 </table>
+
+
+## Libraries and database choices
+
+* `django-rest-framework` - used for API endpoints views and model serializers.
+* `django-filter` - allows creating complex filters with little effort
+* PostgreSQL - for a small project like this sqlite might be a good choice but in this case, PG was used due to 
+following reasons: 
+  * Heroku provides free Postgres database for django apps
+  * some of the queries used in app were not running on sqlite
+
+## tests
+
+Run unit tests with this command
+```
+python manage.py test
+```
+
+Test cases locations:
+* `movies_api/tests`
+* `comments/tests`
+* `business_logic/tests`
