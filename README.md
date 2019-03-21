@@ -56,6 +56,13 @@ To start development server run:
 python manage.py runserver
 ```
 
+If you want to run server in development mode set `PROD_ENV` environmental variable 
+```
+PROD_ENV=1
+```
+
+If you set `SECRET_KEY` envirionmental variable it will override default value stored in settings.py file.
+
 ## Endpoints
 
 ### `/movies/`
@@ -160,7 +167,9 @@ python manage.py runserver
 </table>
 
 
-## Libraries and database choices
+## Project structure
+
+Libraries and database choices:
 
 * `django-rest-framework` - used for API endpoints views and model serializers.
 * `django-filter` - allows creating complex filters with little effort
@@ -168,6 +177,11 @@ python manage.py runserver
 following reasons: 
   * Heroku provides free Postgres database for django apps
   * some of the queries used in app were not running on sqlite
+
+Django apps:
+* `movies_api` - contanis `Movie` model and Movie views
+* `comments` - contains `Comment` model and view associated with this model
+* `business_logic` - this is not traditional django app but this module separates application's business logic (adding new movies, adding comments, generating the ranking)
 
 ## tests
 
